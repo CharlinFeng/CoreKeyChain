@@ -32,8 +32,16 @@ HMSingletonM(CoreKeyChain)
 
 
 
-+(void)setStr:(NSString *)str key:(NSString *)key{[KeyChainStore setString:str forKey:key];}
-+(NSString *)strForKey:(NSString *)key{return [KeyChainStore stringForKey:key];}
++(void)setStr:(NSString *)str key:(NSString *)key{
+    [[NSUserDefaults standardUserDefaults] setObject:str forKey:key];
+    [KeyChainStore setString:str forKey:key];
+}
++(NSString *)strForKey:(NSString *)key{
+    
+    NSString *str = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if(str == nil) str = [KeyChainStore stringForKey:key];
+    return str;
+}
 
 
 +(void)setFloat:(CGFloat)f key:(NSString *)key{[self setStr:[NSString stringWithFormat:@"%@",@(f)] key:key];}
